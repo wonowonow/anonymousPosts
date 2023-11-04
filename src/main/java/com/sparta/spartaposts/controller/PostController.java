@@ -39,17 +39,20 @@ public class PostController {
         return responseDtoList;
     }
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/posts/{id}")
     public PostResponseDto getPost(@PathVariable Long id) {
-        Post post = postList.get(id);
-
-        return new PostResponseDto(post);
+        if (postList.containsKey(id)) {
+            Post post = postList.get(id);
+            return new PostResponseDto(post);
+        } else {
+            throw new IllegalArgumentException("해당 게시글은 존재하지 않습니다.");
+        }
     }
 
-    @PutMapping("/post/{id}")
+    @PutMapping("/posts/{id}")
     public Long updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
-        // 해당 포스트가 DB에 존재?
         if (Objects.equals(postList.get(id).getPassword(), postRequestDto.getPassword())) {
+            // 해당 포스트가 DB에 존재?
             if(postList.containsKey(id)) {
                 Post post = postList.get(id);
                 post.update(postRequestDto);
@@ -62,7 +65,7 @@ public class PostController {
         }
     }
 
-    @DeleteMapping("/post/{id}")
+    @DeleteMapping("/posts/{id}")
     public Long deletePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
         if (Objects.equals(postList.get(id).getPassword(), postRequestDto.getPassword())) {
             if(postList.containsKey(id)) {
