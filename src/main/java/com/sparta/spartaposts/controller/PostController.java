@@ -3,6 +3,7 @@ package com.sparta.spartaposts.controller;
 import com.sparta.spartaposts.dto.PostRequestDto;
 import com.sparta.spartaposts.dto.PostResponseDto;
 import com.sparta.spartaposts.entity.Post;
+import com.sparta.spartaposts.service.PostService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -35,7 +36,8 @@ public class PostController {
     public List<PostResponseDto> getPosts() {
         // Map To List
         List<PostResponseDto> responseDtoList = postList.values().stream()
-                .map(PostResponseDto::new).toList();
+                .map(PostResponseDto::new).sorted(Comparator.comparing(PostResponseDto::getCreatedAt).reversed())
+                .toList();
         return responseDtoList;
     }
 
@@ -75,7 +77,7 @@ public class PostController {
                 throw new IllegalArgumentException("해당 게시글은 존재하지 않습니다.");
             }
         } else {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다."); // 3층 분리 후 컨트롤러에서 try catch로 잡아야 함!
         }
     }
 
