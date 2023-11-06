@@ -12,6 +12,12 @@ import java.util.List;
 
 @RestController
 public class PostController {
+
+    private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
     private HttpHeaders makeUTF8Header(){
         HttpHeaders returnResHeaders = new HttpHeaders();
         returnResHeaders.add("Content-Type", "application/json;charset=UTF-8");
@@ -21,25 +27,21 @@ public class PostController {
 
     @PostMapping("/posts")
     public PostResponseDto creatPost(@RequestBody PostRequestDto postRequestDto) {
-        PostService postService = new PostService();
         return postService.creatPost(postRequestDto);
     }
 
     @GetMapping("/posts")
     public List<PostResponseDto> getPosts() {
-        PostService postService = new PostService();
         return postService.getPosts();
     }
 
     @GetMapping("/posts/{id}")
     public PostResponseDto getPost(@PathVariable Long id) {
-        PostService postService = new PostService();
         return postService.getPost(id);
     }
 
     @PutMapping("/posts/{id}")
     public ResponseEntity<String> updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
-        PostService postService = new PostService();
         try {
             postService.updatePost(id, postRequestDto);
         } catch (IllegalArgumentException e) {
@@ -50,7 +52,6 @@ public class PostController {
 
     @DeleteMapping("/posts/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
-        PostService postService = new PostService();
         try {
             postService.deletePost(id, postRequestDto);
         } catch (IllegalArgumentException e) {

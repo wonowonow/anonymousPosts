@@ -3,9 +3,11 @@ package com.sparta.spartaposts.repository;
 import com.sparta.spartaposts.dto.PostRequestDto;
 import com.sparta.spartaposts.dto.PostResponseDto;
 import com.sparta.spartaposts.entity.Post;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Repository
 public class PostRepository {
     private static final Map<Long, Post> postList = new HashMap<>();
     public Post save(Post post) {

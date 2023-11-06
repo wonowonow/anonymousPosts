@@ -7,18 +7,23 @@ import com.sparta.spartaposts.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 
 @Service
 public class PostService {
+
+    private final PostRepository postRepository;
+
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
 
     public PostResponseDto creatPost(PostRequestDto postRequestDto) {
         // requestDto -> Entity
         Post post = new Post(postRequestDto);
         post.setCreatedAt(LocalDateTime.now());
 
-        PostRepository postRepository = new PostRepository();
         Post savePost = postRepository.save(post);
 
         // Entity -> ResponseDto
@@ -28,23 +33,18 @@ public class PostService {
     }
 
     public List<PostResponseDto> getPosts() {
-
-        PostRepository postRepository = new PostRepository();
         return postRepository.findAll();
     }
 
     public PostResponseDto getPost(Long id) {
-        PostRepository postRepository = new PostRepository();
         return postRepository.findPost(id);
     }
 
     public Long updatePost(Long id, PostRequestDto postRequestDto) {
-        PostRepository postRepository = new PostRepository();
         return postRepository.editPost(id, postRequestDto);
     }
 
     public Long deletePost(Long id, PostRequestDto postRequestDto) {
-        PostRepository postRepository = new PostRepository();
         return postRepository.delete(id, postRequestDto);
     }
 }
