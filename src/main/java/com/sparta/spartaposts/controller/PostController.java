@@ -36,8 +36,14 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}")
-    public PostResponseDto getPost(@PathVariable Long id) {
-        return postService.getPost(id);
+    public ResponseEntity<String> getPost(@PathVariable Long id) {
+        try{
+            postService.getPost(id);
+        }
+        catch (NullPointerException | IllegalArgumentException e) {
+            return new ResponseEntity<>("존재하지 않는 게시글입니다.", makeUTF8Header(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(String.valueOf(id), makeUTF8Header(), HttpStatus.OK);
     }
 
     @PutMapping("/posts/{id}")
