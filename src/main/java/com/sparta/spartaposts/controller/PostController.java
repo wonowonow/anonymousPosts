@@ -57,7 +57,7 @@ public class PostController {
             return new ResponseEntity<>(e.getMessage(), makeUTF8Header(), HttpStatus.BAD_REQUEST);
             // 로그 변환해서 e.getMessage를 스트링으로 변환해야함
         }
-        return new ResponseEntity<>(id + "번이 정상적으로 삭제 되었습니다", makeUTF8Header(), HttpStatus.OK);
+        return new ResponseEntity<>("게시글 번호 "+id + "번이 정상적으로 삭제 되었습니다", makeUTF8Header(), HttpStatus.OK);
         // 리스폰스 엔티티
     }
 }
