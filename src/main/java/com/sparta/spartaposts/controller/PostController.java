@@ -32,7 +32,7 @@ public class PostController {
         } catch (NullPointerException e) {
             return new ResponseEntity<>("빈 칸이 있습니다.", makeUTF8Header(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(String.valueOf(postRequestDto), makeUTF8Header(), HttpStatus.OK);
+        return new ResponseEntity<>("게시글 등록 완료!", makeUTF8Header(), HttpStatus.OK);
     }
 
     @GetMapping("/posts")
