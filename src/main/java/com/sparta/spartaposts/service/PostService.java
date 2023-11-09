@@ -31,7 +31,8 @@ public class PostService {
     }
 
     public List<PostResponseDto> getPosts() {
-        return postRepository.findAll().stream().map(PostResponseDto::new).toList();
+        return postRepository.findAllByOrderByCreatedAtDesc().stream()
+                .map(PostResponseDto::new).toList();
     }
 
     public void getPost(Long id) {
