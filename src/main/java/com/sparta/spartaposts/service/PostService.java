@@ -35,14 +35,17 @@ public class PostService {
                 .map(PostResponseDto::new).toList();
     }
 
-    public void getPost(Long id) {
-        findPost(id);
+    public Post getPost(Long id) {
+        return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 포스트는 존재하지 않습니다."));
     }
 
     @Transactional
     public void updatePost(Long id, PostRequestDto postRequestDto) {
         Post post = findPost(id);
 
+        if (post.updateBeforeCheck()) {
+            throw new NullPointerException();
+        }
         if (Objects.equals(post.getPassword(), postRequestDto.getPassword())) {
             post.update(postRequestDto);
         } else {

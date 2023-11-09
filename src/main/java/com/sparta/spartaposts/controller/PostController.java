@@ -2,6 +2,7 @@ package com.sparta.spartaposts.controller;
 
 import com.sparta.spartaposts.dto.PostRequestDto;
 import com.sparta.spartaposts.dto.PostResponseDto;
+import com.sparta.spartaposts.entity.Post;
 import com.sparta.spartaposts.service.PostService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,14 +42,15 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}")
-    public ResponseEntity<String> getPost(@PathVariable Long id) {
+    public ResponseEntity<?> getPost(@PathVariable Long id) {
         try{
-            postService.getPost(id);
+            Post post = postService.getPost(id);
+            PostResponseDto postResponseDto = new PostResponseDto(post);
+            return new ResponseEntity<>(postResponseDto, makeUTF8Header(), HttpStatus.OK);
         }
         catch (NullPointerException | IllegalArgumentException e) {
             return new ResponseEntity<>("존재하지 않는 게시글입니다.", makeUTF8Header(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(String.valueOf(id), makeUTF8Header(), HttpStatus.OK);
     }
 
     @PutMapping("/posts/{id}")
@@ -57,6 +59,8 @@ public class PostController {
             postService.updatePost(id, postRequestDto);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), makeUTF8Header(), HttpStatus.BAD_REQUEST);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>("빈 칸이 있습니다", makeUTF8Header(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(id + "번이 정상적으로 수정 되었습니다.", makeUTF8Header(), HttpStatus.OK);
     }
