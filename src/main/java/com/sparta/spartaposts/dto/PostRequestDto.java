@@ -10,5 +10,4 @@ public class PostRequestDto {
     private String author;
     private String password;
     private String content;
-    private LocalDateTime createdAt;
 }

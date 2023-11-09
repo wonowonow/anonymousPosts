@@ -26,8 +26,13 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public PostResponseDto creatPost(@RequestBody PostRequestDto postRequestDto) {
-        return postService.creatPost(postRequestDto);
+    public ResponseEntity<String> creatPost(@RequestBody PostRequestDto postRequestDto) {
+        try {
+            postService.creatPost(postRequestDto);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>("빈 칸이 있습니다.", makeUTF8Header(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(String.valueOf(postRequestDto), makeUTF8Header(), HttpStatus.OK);
     }
 
     @GetMapping("/posts")
@@ -62,9 +67,7 @@ public class PostController {
             postService.deletePost(id, postRequestDto);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), makeUTF8Header(), HttpStatus.BAD_REQUEST);
-            // 로그 변환해서 e.getMessage를 스트링으로 변환해야함
         }
         return new ResponseEntity<>("게시글 번호 "+id + "번이 정상적으로 삭제 되었습니다", makeUTF8Header(), HttpStatus.OK);
-        // 리스폰스 엔티티
     }
 }

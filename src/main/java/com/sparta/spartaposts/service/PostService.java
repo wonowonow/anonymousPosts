@@ -4,10 +4,10 @@ import com.sparta.spartaposts.dto.PostRequestDto;
 import com.sparta.spartaposts.dto.PostResponseDto;
 import com.sparta.spartaposts.entity.Post;
 import com.sparta.spartaposts.repository.PostRepository;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -20,31 +20,49 @@ public class PostService {
     }
 
     public PostResponseDto creatPost(PostRequestDto postRequestDto) {
-        // requestDto -> Entity
         Post post = new Post(postRequestDto);
-        post.setCreatedAt(LocalDateTime.now());
 
+        if (post.updateBeforeCheck()) {
+            throw new NullPointerException();
+        }
         Post savePost = postRepository.save(post);
 
-        // Entity -> ResponseDto
-        PostResponseDto postResponseDto = new PostResponseDto(post);
-
-        return postResponseDto;
+        return new PostResponseDto(post);
     }
 
     public List<PostResponseDto> getPosts() {
-        return postRepository.findAll();
+        return postRepository.findAll().stream().map(PostResponseDto::new).toList();
     }
 
-    public PostResponseDto getPost(Long id) {
-        return postRepository.findPost(id);
+    public void getPost(Long id) {
+        findPost(id);
     }
 
-    public Long updatePost(Long id, PostRequestDto postRequestDto) {
-        return postRepository.editPost(id, postRequestDto);
+    @Transactional
+    public void updatePost(Long id, PostRequestDto postRequestDto) {
+        Post post = findPost(id);
+
+        if (Objects.equals(post.getPassword(), postRequestDto.getPassword())) {
+            post.update(postRequestDto);
+        } else {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
     }
 
-    public Long deletePost(Long id, PostRequestDto postRequestDto) {
-        return postRepository.delete(id, postRequestDto);
+    public void deletePost(Long id, PostRequestDto postRequestDto) {
+        Post post = findPost(id);
+
+        if (Objects.equals(post.getPassword(), postRequestDto.getPassword())) {
+            postRepository.delete(post);
+        } else {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
+
+    private Post findPost(Long id) {
+
+        return postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("선택한 포스트는 존재하지 않습니다."));
     }
 }
