@@ -35,4 +35,3 @@
 ## ERD
 ![image](https://github.com/wonowonow/anonymousPosts/assets/123870616/07b6a06d-c0f2-4694-9ab8-e5525add5b72)
 
-ERD를 토대로 한 DB 미구현
