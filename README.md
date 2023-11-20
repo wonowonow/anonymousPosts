@@ -33,5 +33,6 @@
 ![image](https://github.com/wonowonow/anonymousPosts/assets/123870616/93a1dfaa-d213-4ead-8a58-c9ce573ea342)
 
 ## ERD
-![image](https://github.com/wonowonow/anonymousPosts/assets/123870616/07b6a06d-c0f2-4694-9ab8-e5525add5b72)
+![image](https://github.com/wonowonow/anonymousPosts/assets/123870616/b21f68d8-d45c-44f8-8308-83a12137a379)
+
 
